@@ -1,0 +1,14 @@
+name: Football
+version: 1.0
+main: de.dercoder.football.bukkit.FootballPlugin
+author: DerCoder
+
+commands:
+  football:
+    description: Provides all interaction opportunities of the football system.
+    permission: football.command
+
+permissions:
+  football.*:
+    description: "Gives you access to all of the football system"
+    default: op

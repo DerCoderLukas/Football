@@ -1,0 +1,32 @@
+allprojects {
+    apply plugin: 'java'
+
+    group = 'de.dercoder.football'
+    version = '1.0.0-SNAPSHOT'
+
+    sourceCompatibility = 11
+
+    repositories {
+        google()
+        mavenLocal()
+        mavenCentral()
+
+        maven {
+            url = "https://hub.spigotmc.org/nexus/content/repositories/snapshots/"
+        }
+        maven {
+            url = "https://oss.sonatype.org/content/repositories/snapshots"
+        }
+    }
+
+    dependencies {
+        testImplementation 'org.junit.jupiter:junit-jupiter-api:5.5.2'
+        testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.5.2'
+
+        testImplementation 'org.mockito:mockito-junit-jupiter:3.2.4'
+    }
+
+    test {
+        useJUnitPlatform()
+    }
+}
