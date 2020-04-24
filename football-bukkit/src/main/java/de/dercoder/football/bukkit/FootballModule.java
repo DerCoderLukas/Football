@@ -60,6 +60,7 @@ public final class FootballModule extends AbstractModule {
         var footballStadionOptional = footballStadionRepository.footballStadion();
         if (footballStadionOptional.isEmpty()) {
             footballStadionRepository.loadAll();
+            return footballStadionRepository.footballStadion().get();
         }
         return footballStadionOptional.get();
     }
