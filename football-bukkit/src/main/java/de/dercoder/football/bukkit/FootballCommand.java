@@ -30,8 +30,8 @@ public final class FootballCommand implements CommandExecutor {
         }
         if (arugments.length > 0) {
             var keyword = arugments[0];
-            if (keyword.equalsIgnoreCase("stadion")) {
-                return onStadionSetting(commandSender, command, arugments);
+            if (keyword.equalsIgnoreCase("stadium")) {
+                return onStadiumSetting(commandSender, command, arugments);
             }
         } else {
 
@@ -39,7 +39,7 @@ public final class FootballCommand implements CommandExecutor {
         return false;
     }
 
-    public boolean onStadionSetting(
+    public boolean onStadiumSetting(
             CommandSender commandSender,
             Command command,
             String[] arguments

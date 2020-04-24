@@ -43,43 +43,43 @@ public final class FootballModule extends AbstractModule {
         return new ObjectMapper(yamlFactory);
     }
 
-    private static final String STADION_REPOSITORY_PATH = "stadion.yml";
+    private static final String STADIUM_REPOSITORY_PATH = "stadium.yml";
 
     @Provides
     @Singleton
-    @Named("stadionPath")
-    Path provideStadionPath() {
-        return Path.of(plugin.getDataFolder().getAbsolutePath(), STADION_REPOSITORY_PATH);
+    @Named("stadiumPath")
+    Path provideStadiumPath() {
+        return Path.of(plugin.getDataFolder().getAbsolutePath(), STADIUM_REPOSITORY_PATH);
     }
 
     @Provides
     @Singleton
-    FootballStadion provideFootballStadion(
-            FootballStadionRepository footballStadionRepository
+    FootballStadium provideFootballStadium(
+            FootballStadiumRepository footballStadiumRepository
     ) {
-        var footballStadionOptional = footballStadionRepository.footballStadion();
-        if (footballStadionOptional.isEmpty()) {
-            footballStadionRepository.loadAll();
-            return footballStadionRepository.footballStadion().get();
+        var footballStadiumOptional = footballStadiumRepository.footballStadium();
+        if (footballStadiumOptional.isEmpty()) {
+            footballStadiumRepository.loadAll();
+            return footballStadiumRepository.footballStadium().get();
         }
-        return footballStadionOptional.get();
+        return footballStadiumOptional.get();
     }
 
     @Provides
     @Singleton
     DefaultFootball provideDefaultFootball(
-            FootballStadion footballStadion
+            FootballStadium footballStadium
     ) {
-        return DefaultFootball.of(footballStadion.stadionCenter());
+        return DefaultFootball.of(footballStadium.stadiumCenter());
     }
 
     @Provides
     @Singleton
     FootballMatch provideFootballMatch(
             DefaultFootball football,
-            FootballStadion footballStadion
+            FootballStadium footballStadium
     ) {
-        return FootballMatch.empty(football, footballStadion.footballGoals());
+        return FootballMatch.empty(football, footballStadium.footballGoals());
     }
 
     @Provides
