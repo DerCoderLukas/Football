@@ -52,25 +52,32 @@ public final class FootballModule extends AbstractModule {
         return Path.of(plugin.getDataFolder().getAbsolutePath(), STADIUM_REPOSITORY_PATH);
     }
 
+    private static final String FOOTBALL_CONFIGURATION_PATH = "configuration.yml";
+
+    @Provides
+    @Singleton
+    @Named("configurationPath")
+    Path provideConfigurationPath() {
+        return Path.of(plugin.getDataFolder().getAbsolutePath(), FOOTBALL_CONFIGURATION_PATH);
+    }
+
     @Provides
     @Singleton
     FootballStadium provideFootballStadium(
             FootballStadiumRepository footballStadiumRepository
     ) {
-        var footballStadiumOptional = footballStadiumRepository.footballStadium();
-        if (footballStadiumOptional.isEmpty()) {
-            footballStadiumRepository.loadAll();
-            return footballStadiumRepository.footballStadium().get();
-        }
-        return footballStadiumOptional.get();
+        return footballStadiumRepository.footballStadium();
     }
 
     @Provides
     @Singleton
     DefaultFootball provideDefaultFootball(
-            FootballStadium footballStadium
+            FootballStadium footballStadium,
+            DefaultFootballFactory defaultFootballFactory
     ) {
-        return DefaultFootball.of(footballStadium.stadiumCenter());
+        return defaultFootballFactory.createDefaultFootball(
+                footballStadium.stadiumCenter()
+        );
     }
 
     @Provides

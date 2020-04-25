@@ -7,6 +7,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public final class FootballPlugin extends JavaPlugin {
     @Inject
+    private FootballConfigurationRepository footballConfigurationRepository;
+    @Inject
     private FootballStadiumRepository footballStadiumRepository;
     @Inject
     private PluginManager pluginManager;
@@ -21,17 +23,23 @@ public final class FootballPlugin extends JavaPlugin {
         var module = FootballModule.withPlugin(this);
         var injector = Guice.createInjector(module);
         injector.injectMembers(this);
-        loadStadiums();
+        loadFootballConfiguration();
+        loadStadiumConfiguration();
         registerCommands();
         registerListeners();
     }
 
     private void saveDefaultResources() {
+        saveResource("configuration.yml", false);
         saveResource("stadium.yml", false);
     }
 
-    private void loadStadiums() {
-        footballStadiumRepository.loadAll();
+    private void loadFootballConfiguration() {
+        footballConfigurationRepository.load();
+    }
+
+    private void loadStadiumConfiguration() {
+        footballStadiumRepository.load();
     }
 
     private void registerCommands() {
@@ -45,10 +53,10 @@ public final class FootballPlugin extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        saveStadiums();
+        saveStadiumConfiguration();
     }
 
-    private void saveStadiums() {
-        footballStadiumRepository.saveAll();
+    private void saveStadiumConfiguration() {
+        footballStadiumRepository.save();
     }
 }

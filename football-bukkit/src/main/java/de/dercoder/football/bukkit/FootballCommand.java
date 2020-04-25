@@ -44,6 +44,7 @@ public final class FootballCommand implements CommandExecutor {
             Command command,
             String[] arguments
     ) {
+
         return true;
     }
 }

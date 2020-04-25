@@ -15,6 +15,10 @@ public final class FootballGame {
         this.footballGameState = footballGameState;
     }
 
+    public FootballMatch footballMatch() {
+        return footballMatch;
+    }
+
     public boolean isRunning() {
         return this.footballGameState == FootballGameState.RUNNING;
     }

@@ -18,5 +18,15 @@ public final class FootballTrigger implements Listener {
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent playerMove) {
         var player = playerMove.getPlayer();
+        if (!footballGame.isRunning()) {
+            return;
+        }
+        var defaultFootball = (DefaultFootball)
+                footballGame.footballMatch().football();
+        var footballLocation = defaultFootball.location();
+        var playerLocation = player.getLocation();
+        if (footballLocation.distance(playerLocation) < 1.0) {
+            defaultFootball.kick(player);
+        }
     }
 }

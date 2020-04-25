@@ -7,7 +7,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 import java.nio.file.Path;
-import java.util.Optional;
 
 @Singleton
 public final class FootballStadiumRepository {
@@ -24,7 +23,7 @@ public final class FootballStadiumRepository {
         this.repositoryPath = repositoryPath;
     }
 
-    public void loadAll() {
+    public void load() {
         if (footballStadium != null) {
             return;
         }
@@ -37,7 +36,7 @@ public final class FootballStadiumRepository {
     }
 
     private FootballStadiumConfiguration readConfiguration()
-            throws FootballStadiumConfigurationException
+            throws FootballConfigurationException
     {
         try {
             return objectMapper.readValue(
@@ -45,12 +44,12 @@ public final class FootballStadiumRepository {
                     FootballStadiumConfiguration.class
             );
         } catch (Exception exception) {
-            throw FootballStadiumConfigurationException
-                    .create("Can't load Stadium-Configuration");
+            throw FootballConfigurationException
+                    .create("Can't load the stadium configuration");
         }
     }
 
-    public void saveAll() {
+    public void save() {
         var configuration = buildConfiguration();
         writeConfiguration(configuration);
     }
@@ -74,8 +73,11 @@ public final class FootballStadiumRepository {
         }
     }
 
-    public Optional<FootballStadium> footballStadium() {
-        return Optional.ofNullable(footballStadium);
+    public FootballStadium footballStadium() {
+        if (footballStadium == null) {
+            load();
+        }
+        return footballStadium;
     }
 
     public void setFootballStadium(FootballStadium footballStadium) {
