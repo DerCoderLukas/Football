@@ -12,11 +12,11 @@ Simple football system with simple administrative control and setup as well as s
 
 The installation of the plugin is very simple and can be done via the following steps.
 
-```bash
 • Download the jar from the release area.
+
 • Put the jar in your plugins folder of your server and start it.
+
 • If you want to change messages or anything else on the system, you can do this in the configuration file in /plugins/Football/configuration.yml (please note that the server must be shutdown to configure).
-```
 
 # Contributing
 
