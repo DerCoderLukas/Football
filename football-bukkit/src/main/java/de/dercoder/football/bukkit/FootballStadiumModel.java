@@ -2,6 +2,8 @@ package de.dercoder.football.bukkit;
 
 import com.google.common.base.Preconditions;
 
+import java.util.Arrays;
+
 public final class FootballStadiumModel {
     private String name;
     private FootballLocationModel stadiumCenter;
@@ -59,12 +61,10 @@ public final class FootballStadiumModel {
     private DefaultFootballGoal[] modelsToGoals(
             FootballGoalModel[] footballGoalModels
     ) {
-        var footballGoals = new DefaultFootballGoal[footballGoalModels.length];
-        for (var i = 0; i < footballGoalModels.length; i++) {
-            var footballGoal = footballGoalModels[i];
-            footballGoals[i] = modelToGoal(footballGoal);
-        }
-        return footballGoals;
+        var goals = Arrays.stream(footballGoalModels)
+                .map(this::modelToGoal)
+                .toArray(DefaultFootballGoal[]::new);
+        return goals;
     }
 
     private DefaultFootballGoal modelToGoal(
@@ -90,12 +90,10 @@ public final class FootballStadiumModel {
     private static FootballGoalModel[] modelsFromGoals(
             DefaultFootballGoal[] footballGoals
     ) {
-        var goals = new FootballGoalModel[footballGoals.length];
-        for (var i = 0; i < footballGoals.length; i++) {
-            var footballGoal = footballGoals[i];
-            goals[i] = modelFromGoal(footballGoal);
-        }
-        return goals;
+        var goalModels = Arrays.stream(footballGoals)
+                .map(FootballStadiumModel::modelFromGoal)
+                .toArray(FootballGoalModel[]::new);
+        return goalModels;
     }
 
     private static FootballGoalModel modelFromGoal(

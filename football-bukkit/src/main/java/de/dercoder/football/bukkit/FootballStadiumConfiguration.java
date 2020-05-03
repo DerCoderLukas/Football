@@ -1,24 +1,25 @@
 package de.dercoder.football.bukkit;
 
-public final class FootballStadiumConfiguration {
+import java.util.List;
 
-    private FootballStadiumModel stadium;
+public final class FootballStadiumConfiguration {
+    private List<FootballStadiumModel> stadiums;
 
     FootballStadiumConfiguration() {
 
     }
 
     FootballStadiumConfiguration(
-            FootballStadiumModel stadium
+            List<FootballStadiumModel> stadiums
     ) {
-        this.stadium = stadium;
+        this.stadiums = stadiums;
     }
 
-    public FootballStadiumModel getStadium() {
-        return stadium;
+    public List<FootballStadiumModel> getStadiums() {
+        return stadiums;
     }
 
-    public void setStadium(FootballStadiumModel stadium) {
-        this.stadium = stadium;
+    public void setStadiums(List<FootballStadiumModel> stadiums) {
+        this.stadiums = stadiums;
     }
 }

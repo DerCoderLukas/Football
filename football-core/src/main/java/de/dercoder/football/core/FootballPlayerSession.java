@@ -23,21 +23,10 @@ public final class FootballPlayerSession {
         goals += 1;
     }
 
-    public boolean punish(FootballPunishment footballPunishment) {
+    public void punish(FootballPunishment footballPunishment) {
         Preconditions.checkNotNull(footballPunishment);
-        if (footballPunishment == FootballPunishment.UNPUNISHED ||
-                this.footballPunishment == FootballPunishment.RED_CARD) {
-            return false;
-        }
-        if (this.footballPunishment == FootballPunishment.UNPUNISHED) {
-            this.footballPunishment = footballPunishment;
-            return true;
-        }
-        if (this.footballPunishment == FootballPunishment.YELLOW_CARD) {
-            this.footballPunishment = FootballPunishment.RED_CARD;
-            return true;
-        }
-        return false;
+        this.footballPunishment = footballPunishment
+                .punish(this.footballPunishment);
     }
 
     public UUID id() {

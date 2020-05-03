@@ -7,7 +7,6 @@ import com.google.common.base.Preconditions;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.name.Named;
-import de.dercoder.football.core.FootballMatch;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -29,6 +28,15 @@ public final class FootballModule extends AbstractModule {
         return plugin.getServer().getPluginManager();
     }
 
+    private static final String FOOTBALL_PREFIX = "§8[§dFootball§8] §7";
+
+    @Provides
+    @Singleton
+    @Named("prefix")
+    String providePrefix() {
+        return FOOTBALL_PREFIX;
+    }
+
     @Provides
     @Singleton
     YAMLFactory provideYamlFactory() {
@@ -43,13 +51,13 @@ public final class FootballModule extends AbstractModule {
         return new ObjectMapper(yamlFactory);
     }
 
-    private static final String STADIUM_REPOSITORY_PATH = "stadium.yml";
+    private static final String STADIUMS_REPOSITORY_PATH = "stadiums.yml";
 
     @Provides
     @Singleton
-    @Named("stadiumPath")
-    Path provideStadiumPath() {
-        return Path.of(plugin.getDataFolder().getAbsolutePath(), STADIUM_REPOSITORY_PATH);
+    @Named("stadiumsPath")
+    Path provideStadiumsPath() {
+        return Path.of(plugin.getDataFolder().getAbsolutePath(), STADIUMS_REPOSITORY_PATH);
     }
 
     private static final String FOOTBALL_CONFIGURATION_PATH = "configuration.yml";
@@ -63,41 +71,8 @@ public final class FootballModule extends AbstractModule {
 
     @Provides
     @Singleton
-    FootballStadium provideFootballStadium(
-            FootballStadiumRepository footballStadiumRepository
-    ) {
-        return footballStadiumRepository.footballStadium();
-    }
-
-    @Provides
-    @Singleton
-    DefaultFootball provideDefaultFootball(
-            FootballStadium footballStadium,
-            DefaultFootballFactory defaultFootballFactory
-    ) {
-        return defaultFootballFactory.createDefaultFootball(
-                footballStadium.stadiumCenter()
-        );
-    }
-
-    @Provides
-    @Singleton
-    FootballMatch provideFootballMatch(
-            DefaultFootball football,
-            FootballStadium footballStadium
-    ) {
-        return FootballMatch.empty(football, footballStadium.footballGoals());
-    }
-
-    @Provides
-    @Singleton
-    FootballGame provideFootballGame(
-            FootballMatch footballMatch
-    ) {
-        return FootballGame.of(
-                footballMatch,
-                FootballGame.FootballGameState.NOT_RUNNING
-        );
+    FootballGameRegistry provideFootballGameRegistry() {
+        return FootballGameRegistry.empty();
     }
 
     public static FootballModule withPlugin(

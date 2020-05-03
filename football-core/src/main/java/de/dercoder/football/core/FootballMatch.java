@@ -9,14 +9,14 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public final class FootballMatch {
     private final Football football;
     private final FootballGoal[] goals;
-    private final Set<FootballPlayerSession> players;
+    private final Collection<FootballPlayerSession> players;
     private FootballTeam[] teams;
 
     private FootballMatch(
             Football football,
             FootballGoal[] goals,
             FootballTeam[] teams,
-            Set<FootballPlayerSession> players
+            Collection<FootballPlayerSession> players
     ) {
         this.football = football;
         this.goals = goals;
@@ -27,7 +27,7 @@ public final class FootballMatch {
     private FootballMatch(
             Football football,
             FootballGoal[] goals,
-            Set<FootballPlayerSession> players
+            Collection<FootballPlayerSession> players
     ) {
         this.football = football;
         this.goals = goals;
@@ -93,6 +93,11 @@ public final class FootballMatch {
         removePlayer(playingPlayer);
     }
 
+    public boolean contains(FootballPlayer footballPlayer) {
+        Preconditions.checkNotNull(footballPlayer);
+        return (findPlayerSession(footballPlayer).isPresent() || (findTeamOfPlayer(footballPlayer).isPresent()));
+    }
+
     public Optional<FootballPlayerSession> findPlayerSession(FootballPlayer footballPlayer) {
         Preconditions.checkNotNull(footballPlayer);
         return players.stream()
@@ -102,23 +107,28 @@ public final class FootballMatch {
 
     public Optional<FootballTeam> findTeamOfPlayer(FootballPlayer footballPlayer) {
         Preconditions.checkNotNull(footballPlayer);
-        for (var footballTeam : teams) {
-            if (footballTeam.contains(footballPlayer)) {
-                return Optional.of(footballTeam);
-            }
-        }
-        return Optional.empty();
+        return Arrays.stream(teams)
+                .filter(footballTeam -> footballTeam.contains(footballPlayer))
+                .findFirst();
+    }
+
+    public Optional<FootballTeam> findTeamOfGoal(FootballGoal footballGoal) {
+        Preconditions.checkNotNull(footballGoal);
+        return Arrays.stream(teams)
+                .filter(footballTeam -> footballTeam.footballGoal().equals(footballGoal))
+                .findFirst();
     }
 
     public void fillMatch(FootballTeam[] teams) {
+        Preconditions.checkNotNull(teams);
         this.teams = teams;
         for (var footballTeam : teams) {
             footballTeam.players().forEach(this::addPlayer);
         }
     }
 
-    public Football football() {
-        return football;
+    public <T extends Football> T football() {
+        return (T) football;
     }
 
     public FootballGoal[] goals() {
@@ -130,7 +140,7 @@ public final class FootballMatch {
     }
 
     public Collection<FootballPlayerSession> players() {
-        return List.copyOf(players);
+        return Set.copyOf(players);
     }
 
     public static FootballMatch of(
@@ -143,7 +153,7 @@ public final class FootballMatch {
         Preconditions.checkNotNull(goals);
         Preconditions.checkNotNull(teams);
         Preconditions.checkNotNull(players);
-        return new FootballMatch(football, goals, teams, players);
+        return new FootballMatch(football, goals, teams, Sets.newHashSet(players));
     }
 
     public static FootballMatch empty(

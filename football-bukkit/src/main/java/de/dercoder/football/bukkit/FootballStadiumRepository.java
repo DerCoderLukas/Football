@@ -2,34 +2,37 @@ package de.dercoder.football.bukkit;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Sets;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 import java.nio.file.Path;
+import java.util.Collection;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Singleton
 public final class FootballStadiumRepository {
+    private final Collection<FootballStadium> footballStadiums;
     private final ObjectMapper objectMapper;
     private final Path repositoryPath;
-    private FootballStadium footballStadium;
 
     @Inject
     private FootballStadiumRepository(
             ObjectMapper objectMapper,
-            @Named("stadiumPath") Path repositoryPath
+            @Named("stadiumsPath") Path repositoryPath
     ) {
+        this.footballStadiums = Sets.newHashSet();
         this.objectMapper = objectMapper;
         this.repositoryPath = repositoryPath;
     }
 
-    public void load() {
-        if (footballStadium != null) {
-            return;
-        }
+    public void loadAll() {
         try {
             var configuration = readConfiguration();
-            footballStadium = configuration.getStadium().toFootballStadium();
+            configuration.getStadiums().forEach(this::register);
         } catch (Exception exception) {
             exception.printStackTrace();
         }
@@ -44,20 +47,22 @@ public final class FootballStadiumRepository {
                     FootballStadiumConfiguration.class
             );
         } catch (Exception exception) {
+            exception.printStackTrace();
             throw FootballConfigurationException
                     .create("Can't load the stadium configuration");
         }
     }
 
-    public void save() {
+    public void saveAll() {
         var configuration = buildConfiguration();
         writeConfiguration(configuration);
     }
 
     private FootballStadiumConfiguration buildConfiguration() {
-        var footballStadiumModel = FootballStadiumModel
-                .ofFootballStadium(footballStadium);
-        return new FootballStadiumConfiguration(footballStadiumModel);
+        var footballStadiumsModels = footballStadiums.stream()
+                .map(FootballStadiumModel::ofFootballStadium)
+                .collect(Collectors.toUnmodifiableList());
+        return new FootballStadiumConfiguration(footballStadiumsModels);
     }
 
     private void writeConfiguration(
@@ -73,15 +78,34 @@ public final class FootballStadiumRepository {
         }
     }
 
-    public FootballStadium footballStadium() {
-        if (footballStadium == null) {
-            load();
-        }
-        return footballStadium;
+    public Optional<FootballStadium> find(String name) {
+        Preconditions.checkNotNull(name);
+        return footballStadiums.stream()
+                .filter(stadium -> stadium.name().equals(name))
+                .findFirst();
     }
 
-    public void setFootballStadium(FootballStadium footballStadium) {
+    public Collection<FootballStadium> findAll() {
+        return Set.copyOf(footballStadiums);
+    }
+
+    public void register(FootballStadium footballStadium) {
         Preconditions.checkNotNull(footballStadium);
-        this.footballStadium = footballStadium;
+        footballStadiums.add(footballStadium);
+    }
+
+    public void register(FootballStadiumModel footballStadiumModel) {
+        Preconditions.checkNotNull(footballStadiumModel);
+        footballStadiums.add(footballStadiumModel.toFootballStadium());
+    }
+
+    public void unregister(FootballStadium footballStadium) {
+        Preconditions.checkNotNull(footballStadium);
+        footballStadiums.remove(footballStadium);
+    }
+
+    public void unregister(FootballStadiumModel footballStadiumModel) {
+        Preconditions.checkNotNull(footballStadiumModel);
+        footballStadiums.remove(footballStadiumModel.toFootballStadium());
     }
 }

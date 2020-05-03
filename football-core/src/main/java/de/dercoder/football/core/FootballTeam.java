@@ -4,16 +4,21 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.Sets;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Set;
 
 public final class FootballTeam {
-    private final Set<FootballPlayer> players;
+    private final Collection<FootballPlayer> players;
+    private final FootballGoal footballGoal;
+    private int goals;
 
     private FootballTeam(
-            Set<FootballPlayer> players
+            Collection<FootballPlayer> players,
+            FootballGoal footballGoal,
+            int goals
     ) {
         this.players = players;
+        this.footballGoal = footballGoal;
+        this.goals = goals;
     }
 
     public void addPlayer(FootballPlayer footballPlayer) {
@@ -28,21 +33,52 @@ public final class FootballTeam {
 
     public boolean contains(FootballPlayer footballPlayer) {
         Preconditions.checkNotNull(footballPlayer);
-        return players.contains(footballPlayer);
+        if(players.contains(footballPlayer)) {
+            return true;
+        }
+        return this.players.stream()
+                .anyMatch(player -> player.id().equals(footballPlayer.id()));
+    }
+
+    public void shootAGoal() {
+        goals += 1;
     }
 
     public Collection<FootballPlayer> players() {
         return Set.copyOf(players);
     }
 
-    public static FootballTeam withPlayers(
-            Set<FootballPlayer> players
-    ) {
-        Preconditions.checkNotNull(players);
-        return new FootballTeam(players);
+    public FootballGoal footballGoal() {
+        return footballGoal;
     }
 
-    public static FootballTeam empty() {
-        return new FootballTeam(Sets.newHashSet());
+    public int goals() {
+        return goals;
+    }
+
+    public static FootballTeam of(
+            Set<FootballPlayer> players,
+            FootballGoal footballGoal,
+            int goals
+    ) {
+        Preconditions.checkNotNull(players);
+        Preconditions.checkNotNull(footballGoal);
+        return new FootballTeam(
+                Sets.newHashSet(players),
+                footballGoal,
+                goals
+        );
+    }
+
+    public static FootballTeam empty(
+            FootballGoal footballGoal,
+            int goals
+    ) {
+        Preconditions.checkNotNull(footballGoal);
+        return new FootballTeam(
+                Sets.newHashSet(),
+                footballGoal,
+                goals
+        );
     }
 }

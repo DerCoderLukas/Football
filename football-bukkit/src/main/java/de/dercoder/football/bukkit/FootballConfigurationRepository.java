@@ -5,8 +5,10 @@ import com.google.common.base.Preconditions;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.inject.Singleton;
 import java.nio.file.Path;
 
+@Singleton
 public final class FootballConfigurationRepository {
     private final ObjectMapper objectMapper;
     private final Path repositoryPath;

@@ -1,32 +1,49 @@
 package de.dercoder.football.bukkit;
 
 import com.google.inject.Inject;
+import de.dercoder.football.core.FootballPlayer;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
 
 public final class FootballTrigger implements Listener {
-    private final FootballGame footballGame;
+    private final FootballGameRegistry footballGameRegistry;
 
     @Inject
     private FootballTrigger(
-            FootballGame footballGame
+            FootballGameRegistry footballGameRegistry
     ) {
-        this.footballGame = footballGame;
+        this.footballGameRegistry = footballGameRegistry;
     }
 
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent playerMove) {
         var player = playerMove.getPlayer();
-        if (!footballGame.isRunning()) {
-            return;
-        }
-        var defaultFootball = (DefaultFootball)
-                footballGame.footballMatch().football();
-        var footballLocation = defaultFootball.location();
+        var footballPlayer = FootballPlayer.withId(player.getUniqueId());
+        footballGameRegistry
+                .findGameOfPlayer(footballPlayer)
+                .ifPresent(footballGame -> handleFootballKick(
+                        footballGame,
+                        footballPlayer,
+                        player
+                ));
+    }
+
+    private void handleFootballKick(
+            FootballGame footballGame,
+            FootballPlayer footballPlayer,
+            Player player
+    ) {
+        var football = footballGame.football();
+        var footballLocation = football.location();
         var playerLocation = player.getLocation();
         if (footballLocation.distance(playerLocation) < 1.0) {
-            defaultFootball.kick(player);
+            footballGame.footballMatch()
+                    .findPlayerSession(footballPlayer)
+                    .ifPresent(footballPlayerSession -> {
+                        football.kick(footballPlayerSession, player);
+                    });
         }
     }
 }

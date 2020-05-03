@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import de.dercoder.football.core.Football;
+import de.dercoder.football.core.FootballPlayerSession;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -22,6 +23,9 @@ public final class DefaultFootball implements Football {
     private final String footballTextureSignature;
 
     private ArmorStand footballEntity;
+    private int triggeringTask;
+    private Location lastLocation;
+    private FootballPlayerSession shooter;
 
     private DefaultFootball(
             Location spawnLocation,
@@ -29,6 +33,7 @@ public final class DefaultFootball implements Football {
             String footballTextureSignature
     ) {
         this.spawnLocation = spawnLocation;
+        this.lastLocation = spawnLocation;
         this.footballTextureValue = footballTextureValue;
         this.footballTextureSignature = footballTextureSignature;
     }
@@ -89,7 +94,11 @@ public final class DefaultFootball implements Football {
         footballEntity.remove();
     }
 
-    public void kick(Player player) {
+    public void kick(
+            FootballPlayerSession footballPlayerSession,
+            Player player
+    ) {
+        Preconditions.checkNotNull(footballPlayerSession);
         Preconditions.checkNotNull(player);
         var playerLocation = player.getLocation();
         var footballEntityLocation = footballEntity.getLocation();
@@ -98,10 +107,62 @@ public final class DefaultFootball implements Football {
         var velocityZ = footballEntityLocation.getZ() - playerLocation.getZ();
         var footballVelocity = new Vector(velocityX, velocityY, velocityZ);
         footballEntity.setVelocity(footballVelocity);
+        shooter = footballPlayerSession;
+    }
+
+    private static final int FOOTBALL_TRIGGERING_INTERVAL_TICKS = 2;
+
+    public void startTriggering() {
+        triggeringTask = Bukkit.getScheduler().scheduleAsyncRepeatingTask(
+                FootballPlugin.getPlugin(FootballPlugin.class),
+                () -> {
+                    var location = footballEntity.getLocation();
+                    if (isLocationEquals(location, lastLocation)) {
+                        return;
+                    }
+                    var footballMoveEvent = FootballMoveEvent.of(
+                            this,
+                            location.clone(),
+                            lastLocation.clone()
+                    );
+                    lastLocation = location;
+                    Bukkit.getScheduler()
+                            .runTask(
+                                    FootballPlugin.getPlugin(FootballPlugin.class),
+                                    () -> { Bukkit.getPluginManager().callEvent(footballMoveEvent); }
+                            );
+                },
+                0,
+                FOOTBALL_TRIGGERING_INTERVAL_TICKS
+        );
+    }
+
+    private boolean isLocationEquals(
+            Location fistLocation,
+            Location secondLocation
+    ) {
+        if (
+                fistLocation.getX() == secondLocation.getX() &&
+                fistLocation.getY() == secondLocation.getY() &&
+                fistLocation.getZ() == secondLocation.getZ() &&
+                fistLocation.getYaw() == secondLocation.getYaw() &&
+                fistLocation.getPitch() == secondLocation.getPitch()
+        ) {
+            return true;
+        }
+        return false;
+    }
+
+    public void stopTriggering() {
+        Bukkit.getScheduler().cancelTask(triggeringTask);
     }
 
     public Location location() {
-        return footballEntity.getLocation();
+        return footballEntity.getLocation().clone();
+    }
+
+    public FootballPlayerSession shooter() {
+        return shooter;
     }
 
     public static DefaultFootball of(
@@ -112,10 +173,13 @@ public final class DefaultFootball implements Football {
         Preconditions.checkNotNull(spawnLocation);
         Preconditions.checkNotNull(footballTextureValue);
         Preconditions.checkNotNull(footballTextureSignature);
-        return new DefaultFootball(
+        var football = new DefaultFootball(
                 spawnLocation,
                 footballTextureValue,
                 footballTextureSignature
         );
+        football.spawn();
+        football.startTriggering();
+        return football;
     }
 }

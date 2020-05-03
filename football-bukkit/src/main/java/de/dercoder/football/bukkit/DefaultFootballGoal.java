@@ -22,6 +22,42 @@ public final class DefaultFootballGoal implements FootballGoal {
         this.direction = direction;
     }
 
+    public boolean isInGoal(DefaultFootball football) {
+        Preconditions.checkNotNull(football);
+        var footballLocation = football.location();
+        var goalLocationHeight = goalLocation.getY();
+        if (footballLocation.getY() < goalLocationHeight ||
+                footballLocation.getY() > goalLocationHeight + height
+        ) {
+            return false;
+        }
+        var goalWidthHalf = ((double) width) / 2.0;
+        switch (direction) {
+            case NORTH:
+                return (footballLocation.getZ() > goalLocation.getZ() &&
+                        footballLocation.getX() > goalLocation.getX() - goalWidthHalf &&
+                        footballLocation.getX() < goalLocation.getX() + goalWidthHalf
+                );
+            case EAST:
+                return (footballLocation.getX() < goalLocation.getX() &&
+                        footballLocation.getZ() > goalLocation.getZ() - goalWidthHalf &&
+                        footballLocation.getZ() < goalLocation.getZ() + goalWidthHalf
+                );
+            case SOUTH:
+                return (footballLocation.getZ() < goalLocation.getZ() &&
+                        footballLocation.getX() > goalLocation.getX() - goalWidthHalf &&
+                        footballLocation.getX() < goalLocation.getX() + goalWidthHalf
+                );
+            case WEST:
+                return (footballLocation.getX() > goalLocation.getX() &&
+                        footballLocation.getZ() > goalLocation.getZ() - goalWidthHalf &&
+                        footballLocation.getZ() < goalLocation.getZ() + goalWidthHalf
+                );
+            default:
+                return false;
+        }
+    }
+
     public Location goalLocation() {
         return goalLocation;
     }
@@ -58,6 +94,6 @@ public final class DefaultFootballGoal implements FootballGoal {
         NORTH,
         EAST,
         SOUTH,
-        WEST
+        WEST;
     }
 }

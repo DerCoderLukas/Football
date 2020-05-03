@@ -16,6 +16,8 @@ public final class FootballPlugin extends JavaPlugin {
     private FootballCommand footballCommand;
     @Inject
     private FootballTrigger footballTrigger;
+    @Inject
+    private FootballGoalTrigger footballGoalTrigger;
 
     @Override
     public void onEnable() {
@@ -24,22 +26,24 @@ public final class FootballPlugin extends JavaPlugin {
         var injector = Guice.createInjector(module);
         injector.injectMembers(this);
         loadFootballConfiguration();
-        loadStadiumConfiguration();
+        loadStadiums();
         registerCommands();
         registerListeners();
+
+
     }
 
     private void saveDefaultResources() {
         saveResource("configuration.yml", false);
-        saveResource("stadium.yml", false);
+        saveResource("stadiums.yml", false);
     }
 
     private void loadFootballConfiguration() {
         footballConfigurationRepository.load();
     }
 
-    private void loadStadiumConfiguration() {
-        footballStadiumRepository.load();
+    private void loadStadiums() {
+        footballStadiumRepository.loadAll();
     }
 
     private void registerCommands() {
@@ -49,14 +53,20 @@ public final class FootballPlugin extends JavaPlugin {
 
     private void registerListeners() {
         pluginManager.registerEvents(footballTrigger, this);
+        pluginManager.registerEvents(footballGoalTrigger, this);
     }
 
     @Override
     public void onDisable() {
-        saveStadiumConfiguration();
+        saveFootballConfiguration();
+        saveStadiums();
     }
 
-    private void saveStadiumConfiguration() {
-        footballStadiumRepository.save();
+    private void saveFootballConfiguration() {
+        footballConfigurationRepository.save();
+    }
+
+    private void saveStadiums() {
+        footballStadiumRepository.saveAll();
     }
 }
