@@ -3,23 +3,19 @@ package de.dercoder.football.bukkit;
 import java.util.List;
 
 public final class FootballStadiumConfiguration {
-    private List<FootballStadiumModel> stadiums;
+  private List<FootballStadiumModel> stadiums;
 
-    FootballStadiumConfiguration() {
+  FootballStadiumConfiguration() {}
 
-    }
+  FootballStadiumConfiguration(List<FootballStadiumModel> stadiums) {
+    this.stadiums = stadiums;
+  }
 
-    FootballStadiumConfiguration(
-            List<FootballStadiumModel> stadiums
-    ) {
-        this.stadiums = stadiums;
-    }
+  public List<FootballStadiumModel> getStadiums() {
+    return stadiums;
+  }
 
-    public List<FootballStadiumModel> getStadiums() {
-        return stadiums;
-    }
-
-    public void setStadiums(List<FootballStadiumModel> stadiums) {
-        this.stadiums = stadiums;
-    }
+  public void setStadiums(List<FootballStadiumModel> stadiums) {
+    this.stadiums = stadiums;
+  }
 }

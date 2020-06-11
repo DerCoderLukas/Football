@@ -1,11 +1,9 @@
 package de.dercoder.football.core;
 
 public final class EmptyFootballGoal implements FootballGoal {
-    private EmptyFootballGoal() {
+  private EmptyFootballGoal() {}
 
-    }
-
-    public static EmptyFootballGoal create() {
-        return new EmptyFootballGoal();
-    }
+  public static EmptyFootballGoal create() {
+    return new EmptyFootballGoal();
+  }
 }
