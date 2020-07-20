@@ -3,14 +3,19 @@ package de.dercoder.football.bukkit;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.fasterxml.jackson.dataformat.yaml.YAMLGenerator;
+
 import com.google.common.base.Preconditions;
+
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.name.Named;
+
+import de.dercoder.football.bukkit.game.FootballGameRegistry;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import javax.inject.Singleton;
+
 import java.nio.file.Path;
 
 public final class FootballModule extends AbstractModule {
@@ -38,7 +43,9 @@ public final class FootballModule extends AbstractModule {
   @Provides
   @Singleton
   YAMLFactory provideYamlFactory() {
-    return YAMLFactory.builder().disable(YAMLGenerator.Feature.WRITE_DOC_START_MARKER).build();
+    return YAMLFactory.builder()
+      .disable(YAMLGenerator.Feature.WRITE_DOC_START_MARKER)
+      .build();
   }
 
   @Provides
@@ -53,7 +60,10 @@ public final class FootballModule extends AbstractModule {
   @Singleton
   @Named("stadiumsPath")
   Path provideStadiumsPath() {
-    return Path.of(plugin.getDataFolder().getAbsolutePath(), STADIUMS_REPOSITORY_PATH);
+    return Path.of(
+      plugin.getDataFolder().getAbsolutePath(),
+      STADIUMS_REPOSITORY_PATH
+    );
   }
 
   private static final String FOOTBALL_CONFIGURATION_PATH = "configuration.yml";
@@ -62,7 +72,10 @@ public final class FootballModule extends AbstractModule {
   @Singleton
   @Named("configurationPath")
   Path provideConfigurationPath() {
-    return Path.of(plugin.getDataFolder().getAbsolutePath(), FOOTBALL_CONFIGURATION_PATH);
+    return Path.of(
+      plugin.getDataFolder().getAbsolutePath(),
+      FOOTBALL_CONFIGURATION_PATH
+    );
   }
 
   @Provides

@@ -1,4 +1,4 @@
-package de.dercoder.football.bukkit;
+package de.dercoder.football.bukkit.stadium;
 
 import java.util.List;
 

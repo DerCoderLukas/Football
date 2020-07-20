@@ -1,8 +1,10 @@
-package de.dercoder.football.bukkit;
+package de.dercoder.football.bukkit.football;
 
 import com.google.common.base.Preconditions;
+
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
+import de.dercoder.football.bukkit.FootballPlugin;
 import de.dercoder.football.core.Football;
 import de.dercoder.football.core.FootballPlayerSession;
 import org.bukkit.Bukkit;
@@ -28,7 +30,10 @@ public final class DefaultFootball implements Football {
   private FootballPlayerSession shooter;
 
   private DefaultFootball(
-      Location spawnLocation, String footballTextureValue, String footballTextureSignature) {
+    Location spawnLocation,
+    String footballTextureValue,
+    String footballTextureSignature
+  ) {
     this.spawnLocation = spawnLocation;
     this.lastLocation = spawnLocation;
     this.footballTextureValue = footballTextureValue;
@@ -36,8 +41,8 @@ public final class DefaultFootball implements Football {
   }
 
   public void spawn() {
-    footballEntity =
-        (ArmorStand) spawnLocation.getWorld().spawnEntity(spawnLocation, EntityType.ARMOR_STAND);
+    footballEntity = (ArmorStand) spawnLocation.getWorld()
+      .spawnEntity(spawnLocation, EntityType.ARMOR_STAND);
     var footballItemStack = createFootballItemStack();
     footballEntity.setHelmet(footballItemStack);
     footballEntity.setInvulnerable(true);
@@ -49,17 +54,25 @@ public final class DefaultFootball implements Football {
   private ItemStack createFootballItemStack() {
     var itemStack = new ItemStack(Material.PLAYER_HEAD);
     var itemMeta = itemStack.getItemMeta();
-    var gameProfile = profileFromTextures(footballTextureValue, footballTextureSignature);
+    var gameProfile = profileFromTextures(
+      footballTextureValue,
+      footballTextureSignature
+    );
     profileToMeta(itemMeta, gameProfile);
     itemStack.setItemMeta(itemMeta);
     return itemStack;
   }
 
-  private GameProfile profileFromTextures(String textureValue, String textureSignature) {
+  private GameProfile profileFromTextures(
+    String textureValue,
+    String textureSignature
+  ) {
     var gameProfile = new GameProfile(UUID.randomUUID(), "");
-    gameProfile
-        .getProperties()
-        .put("textures", new Property("textures", textureValue, textureSignature));
+    gameProfile.getProperties()
+      .put(
+        "textures",
+        new Property("textures", textureValue, textureSignature)
+      );
     return gameProfile;
   }
 
@@ -98,33 +111,36 @@ public final class DefaultFootball implements Football {
   private static final int FOOTBALL_TRIGGERING_INTERVAL_TICKS = 2;
 
   public void startTriggering() {
-    triggeringTask =
-        Bukkit.getScheduler()
-            .scheduleAsyncRepeatingTask(
-                FootballPlugin.getPlugin(FootballPlugin.class),
-                () -> {
-                  var location = footballEntity.getLocation();
-                  if (isLocationEquals(location, lastLocation)) {
-                    return;
-                  }
-                  var footballMoveEvent =
-                      FootballMoveEvent.of(this, location.clone(), lastLocation.clone());
-                  lastLocation = location;
-                  Bukkit.getScheduler()
-                      .runTask(
-                          FootballPlugin.getPlugin(FootballPlugin.class),
-                          () -> Bukkit.getPluginManager().callEvent(footballMoveEvent));
-                },
-                0,
-                FOOTBALL_TRIGGERING_INTERVAL_TICKS);
+    triggeringTask = Bukkit.getScheduler()
+      .scheduleAsyncRepeatingTask(FootballPlugin.getPlugin(FootballPlugin.class),
+        () -> {
+          var location = footballEntity.getLocation();
+          if (isLocationEquals(location, lastLocation)) {
+            return;
+          }
+          var footballMoveEvent = FootballMoveEvent.of(
+            this,
+            location.clone(),
+            lastLocation.clone()
+          );
+          lastLocation = location;
+          Bukkit.getScheduler()
+            .runTask(FootballPlugin.getPlugin(FootballPlugin.class),
+              () -> Bukkit.getPluginManager().callEvent(footballMoveEvent)
+            );
+        },
+        0,
+        FOOTBALL_TRIGGERING_INTERVAL_TICKS
+      );
   }
 
-  private boolean isLocationEquals(Location fistLocation, Location secondLocation) {
-    if (fistLocation.getX() == secondLocation.getX()
-        && fistLocation.getY() == secondLocation.getY()
-        && fistLocation.getZ() == secondLocation.getZ()
-        && fistLocation.getYaw() == secondLocation.getYaw()
-        && fistLocation.getPitch() == secondLocation.getPitch()) {
+  private boolean isLocationEquals(
+    Location fistLocation,
+    Location secondLocation
+  ) {
+    if (fistLocation.getX() == secondLocation.getX() && fistLocation.getY() == secondLocation
+      .getY() && fistLocation.getZ() == secondLocation.getZ() && fistLocation.getYaw() == secondLocation
+      .getYaw() && fistLocation.getPitch() == secondLocation.getPitch()) {
       return true;
     }
     return false;
@@ -143,12 +159,18 @@ public final class DefaultFootball implements Football {
   }
 
   public static DefaultFootball of(
-      Location spawnLocation, String footballTextureValue, String footballTextureSignature) {
+    Location spawnLocation,
+    String footballTextureValue,
+    String footballTextureSignature
+  ) {
     Preconditions.checkNotNull(spawnLocation);
     Preconditions.checkNotNull(footballTextureValue);
     Preconditions.checkNotNull(footballTextureSignature);
-    var football =
-        new DefaultFootball(spawnLocation, footballTextureValue, footballTextureSignature);
+    var football = new DefaultFootball(
+      spawnLocation,
+      footballTextureValue,
+      footballTextureSignature
+    );
     football.spawn();
     football.startTriggering();
     return football;

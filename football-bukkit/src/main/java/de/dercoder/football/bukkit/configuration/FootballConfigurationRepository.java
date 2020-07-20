@@ -1,11 +1,13 @@
-package de.dercoder.football.bukkit;
+package de.dercoder.football.bukkit.configuration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import com.google.common.base.Preconditions;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
+
 import java.nio.file.Path;
 
 @Singleton
@@ -16,7 +18,8 @@ public final class FootballConfigurationRepository {
 
   @Inject
   private FootballConfigurationRepository(
-      ObjectMapper objectMapper, @Named("configurationPath") Path repositoryPath) {
+    ObjectMapper objectMapper, @Named("configurationPath") Path repositoryPath
+  ) {
     this.objectMapper = objectMapper;
     this.repositoryPath = repositoryPath;
   }
@@ -34,9 +37,13 @@ public final class FootballConfigurationRepository {
 
   private FootballConfiguration readConfiguration() throws FootballConfigurationException {
     try {
-      return objectMapper.readValue(repositoryPath.toFile(), FootballConfiguration.class);
+      return objectMapper.readValue(
+        repositoryPath.toFile(),
+        FootballConfiguration.class
+      );
     } catch (Exception exception) {
-      throw FootballConfigurationException.create("Can't load the football configuration");
+      throw FootballConfigurationException.create(
+        "Can't load the football configuration");
     }
   }
 

@@ -1,4 +1,4 @@
-package de.dercoder.football.bukkit;
+package de.dercoder.football.bukkit.configuration;
 
 public final class FootballConfiguration {
   private String footballTextureValue;
@@ -10,11 +10,12 @@ public final class FootballConfiguration {
   FootballConfiguration() {}
 
   FootballConfiguration(
-      String footballTextureValue,
-      String footballTextureSignature,
-      String intermediateScoreMessage,
-      String scoreMainMessage,
-      String scoreSecondaryMessage) {
+    String footballTextureValue,
+    String footballTextureSignature,
+    String intermediateScoreMessage,
+    String scoreMainMessage,
+    String scoreSecondaryMessage
+  ) {
     this.footballTextureValue = footballTextureValue;
     this.footballTextureSignature = footballTextureSignature;
     this.intermediateScoreMessage = intermediateScoreMessage;
@@ -43,7 +44,12 @@ public final class FootballConfiguration {
   }
 
   public String parseIntermediateScoreMessage(int firstScore, int secondScore) {
-    return parseScoreMessage(intermediateScoreMessage, "", firstScore, secondScore);
+    return parseScoreMessage(
+      intermediateScoreMessage,
+      "",
+      firstScore,
+      secondScore
+    );
   }
 
   public void setIntermediateScoreMessage(String intermediateScoreMessage) {
@@ -54,7 +60,11 @@ public final class FootballConfiguration {
     return scoreMainMessage;
   }
 
-  public String parseScoreMainMessage(String scorer, int firstScore, int secondScore) {
+  public String parseScoreMainMessage(
+    String scorer,
+    int firstScore,
+    int secondScore
+  ) {
     return parseScoreMessage(scoreMainMessage, scorer, firstScore, secondScore);
   }
 
@@ -66,19 +76,32 @@ public final class FootballConfiguration {
     return scoreSecondaryMessage;
   }
 
-  public String parseScoreSecondaryMessage(String scorer, int firstScore, int secondScore) {
-    return parseScoreMessage(scoreSecondaryMessage, scorer, firstScore, secondScore);
+  public String parseScoreSecondaryMessage(
+    String scorer,
+    int firstScore,
+    int secondScore
+  ) {
+    return parseScoreMessage(
+      scoreSecondaryMessage,
+      scorer,
+      firstScore,
+      secondScore
+    );
   }
 
   public void setScoreSecondaryMessage(String scoreSecondaryMessage) {
     this.scoreSecondaryMessage = scoreSecondaryMessage;
   }
 
-  private String parseScoreMessage(String message, String scorer, int firstScore, int secondScore) {
-    return message
-        .replace("&", "§")
-        .replace("%scorer%", scorer)
-        .replace("%firstScore%", String.valueOf(firstScore))
-        .replace("%secondScore%", String.valueOf(secondScore));
+  private String parseScoreMessage(
+    String message,
+    String scorer,
+    int firstScore,
+    int secondScore
+  ) {
+    return message.replace("&", "§")
+      .replace("%scorer%", scorer)
+      .replace("%firstScore%", String.valueOf(firstScore))
+      .replace("%secondScore%", String.valueOf(secondScore));
   }
 }

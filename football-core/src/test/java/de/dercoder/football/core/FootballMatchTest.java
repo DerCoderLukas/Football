@@ -19,8 +19,8 @@ final class FootballMatchTest {
     var football = EmptyFootball.create();
     var goals = new FootballGoal[] {EmptyFootballGoal.create(), EmptyFootballGoal.create()};
 
-    var firstTeam = createFootballTeam(FOOTBALL_TEAM_SIZE);
-    var secondTeam = createFootballTeam(FOOTBALL_TEAM_SIZE);
+    var firstTeam = createFootballTeam(FOOTBALL_TEAM_SIZE, goals[0]);
+    var secondTeam = createFootballTeam(FOOTBALL_TEAM_SIZE, goals[1]);
     var teams = new FootballTeam[] {firstTeam, secondTeam};
 
     Set<FootballPlayerSession> playerSessions = Sets.newHashSet();
@@ -29,12 +29,12 @@ final class FootballMatchTest {
     footballMatch = FootballMatch.of(football, goals, teams, playerSessions);
   }
 
-  FootballTeam createFootballTeam(int size) {
+  FootballTeam createFootballTeam(int size, FootballGoal footballGoal) {
     Set<FootballPlayer> players = Sets.newHashSet();
     for (var i = 0; i < size; i++) {
       players.add(FootballPlayer.withId(UUID.randomUUID()));
     }
-    return FootballTeam.withPlayers(players);
+    return FootballTeam.of(players, footballGoal, 0);
   }
 
   void teamPlayersToSessionSet(

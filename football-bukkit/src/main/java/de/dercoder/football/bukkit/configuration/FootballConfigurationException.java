@@ -1,4 +1,4 @@
-package de.dercoder.football.bukkit;
+package de.dercoder.football.bukkit.configuration;
 
 import com.google.common.base.Preconditions;
 

@@ -1,4 +1,4 @@
-package de.dercoder.football.bukkit;
+package de.dercoder.football.bukkit.football;
 
 import org.bukkit.Location;
 import org.bukkit.event.Event;
@@ -11,7 +11,11 @@ public final class FootballMoveEvent extends Event {
   private final Location locationTo;
   private final Location locationFrom;
 
-  private FootballMoveEvent(DefaultFootball football, Location locationTo, Location locationFrom) {
+  private FootballMoveEvent(
+    DefaultFootball football,
+    Location locationTo,
+    Location locationFrom
+  ) {
     this.football = football;
     this.locationTo = locationTo;
     this.locationFrom = locationFrom;
@@ -39,7 +43,8 @@ public final class FootballMoveEvent extends Event {
   }
 
   public static FootballMoveEvent of(
-      DefaultFootball football, Location locationTo, Location locationFrom) {
+    DefaultFootball football, Location locationTo, Location locationFrom
+  ) {
     return new FootballMoveEvent(football, locationTo, locationFrom);
   }
 }

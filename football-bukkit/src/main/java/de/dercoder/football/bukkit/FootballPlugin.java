@@ -2,6 +2,11 @@ package de.dercoder.football.bukkit;
 
 import com.google.inject.Guice;
 import com.google.inject.Inject;
+
+import de.dercoder.football.bukkit.configuration.FootballConfigurationRepository;
+import de.dercoder.football.bukkit.football.FootballTrigger;
+import de.dercoder.football.bukkit.goal.FootballGoalTrigger;
+import de.dercoder.football.bukkit.stadium.FootballStadiumRepository;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 

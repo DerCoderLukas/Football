@@ -1,12 +1,15 @@
-package de.dercoder.football.bukkit;
+package de.dercoder.football.bukkit.stadium;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Sets;
 
+import de.dercoder.football.bukkit.configuration.FootballConfigurationException;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
+
 import java.nio.file.Path;
 import java.util.Collection;
 import java.util.Optional;
@@ -21,7 +24,8 @@ public final class FootballStadiumRepository {
 
   @Inject
   private FootballStadiumRepository(
-      ObjectMapper objectMapper, @Named("stadiumsPath") Path repositoryPath) {
+    ObjectMapper objectMapper, @Named("stadiumsPath") Path repositoryPath
+  ) {
     this.footballStadiums = Sets.newHashSet();
     this.objectMapper = objectMapper;
     this.repositoryPath = repositoryPath;
@@ -38,10 +42,14 @@ public final class FootballStadiumRepository {
 
   private FootballStadiumConfiguration readConfiguration() throws FootballConfigurationException {
     try {
-      return objectMapper.readValue(repositoryPath.toFile(), FootballStadiumConfiguration.class);
+      return objectMapper.readValue(
+        repositoryPath.toFile(),
+        FootballStadiumConfiguration.class
+      );
     } catch (Exception exception) {
       exception.printStackTrace();
-      throw FootballConfigurationException.create("Can't load the stadium configuration");
+      throw FootballConfigurationException.create(
+        "Can't load the stadium configuration");
     }
   }
 
@@ -51,10 +59,9 @@ public final class FootballStadiumRepository {
   }
 
   private FootballStadiumConfiguration buildConfiguration() {
-    var footballStadiumsModels =
-        footballStadiums.stream()
-            .map(FootballStadiumModel::ofFootballStadium)
-            .collect(Collectors.toUnmodifiableList());
+    var footballStadiumsModels = footballStadiums.stream()
+      .map(FootballStadiumModel::ofFootballStadium)
+      .collect(Collectors.toUnmodifiableList());
     return new FootballStadiumConfiguration(footballStadiumsModels);
   }
 
@@ -68,7 +75,9 @@ public final class FootballStadiumRepository {
 
   public Optional<FootballStadium> find(String name) {
     Preconditions.checkNotNull(name);
-    return footballStadiums.stream().filter(stadium -> stadium.name().equals(name)).findFirst();
+    return footballStadiums.stream()
+      .filter(stadium -> stadium.name().equals(name))
+      .findFirst();
   }
 
   public Collection<FootballStadium> findAll() {

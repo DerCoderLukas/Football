@@ -1,8 +1,11 @@
-package de.dercoder.football.bukkit;
+package de.dercoder.football.bukkit.stadium;
 
 import com.google.common.base.Preconditions;
 
 import java.util.Arrays;
+
+import de.dercoder.football.bukkit.goal.DefaultFootballGoal;
+import de.dercoder.football.bukkit.goal.FootballGoalModel;
 
 public final class FootballStadiumModel {
   private String name;
@@ -12,7 +15,8 @@ public final class FootballStadiumModel {
   FootballStadiumModel() {}
 
   FootballStadiumModel(
-      String name, FootballLocationModel stadiumCenter, FootballGoalModel[] goals) {
+    String name, FootballLocationModel stadiumCenter, FootballGoalModel[] goals
+  ) {
     this.name = name;
     this.stadiumCenter = stadiumCenter;
     this.goals = goals;
@@ -48,10 +52,9 @@ public final class FootballStadiumModel {
   }
 
   private DefaultFootballGoal[] modelsToGoals(FootballGoalModel[] footballGoalModels) {
-    var goals =
-        Arrays.stream(footballGoalModels)
-            .map(this::modelToGoal)
-            .toArray(DefaultFootballGoal[]::new);
+    var goals = Arrays.stream(footballGoalModels)
+      .map(this::modelToGoal)
+      .toArray(DefaultFootballGoal[]::new);
     return goals;
   }
 
@@ -63,14 +66,17 @@ public final class FootballStadiumModel {
     Preconditions.checkNotNull(footballStadium);
     var stadiumCenterModel = FootballLocationModel.ofLocation(footballStadium.stadiumCenter());
     var stadiumGoals = modelsFromGoals(footballStadium.footballGoals());
-    return new FootballStadiumModel(footballStadium.name(), stadiumCenterModel, stadiumGoals);
+    return new FootballStadiumModel(
+      footballStadium.name(),
+      stadiumCenterModel,
+      stadiumGoals
+    );
   }
 
   private static FootballGoalModel[] modelsFromGoals(DefaultFootballGoal[] footballGoals) {
-    var goalModels =
-        Arrays.stream(footballGoals)
-            .map(FootballStadiumModel::modelFromGoal)
-            .toArray(FootballGoalModel[]::new);
+    var goalModels = Arrays.stream(footballGoals)
+      .map(FootballStadiumModel::modelFromGoal)
+      .toArray(FootballGoalModel[]::new);
     return goalModels;
   }
 

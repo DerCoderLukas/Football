@@ -1,6 +1,8 @@
-package de.dercoder.football.bukkit;
+package de.dercoder.football.bukkit.goal;
 
 import com.google.common.base.Preconditions;
+
+import de.dercoder.football.bukkit.stadium.FootballLocationModel;
 
 public final class FootballGoalModel {
   private FootballLocationModel goalLocation;
@@ -10,7 +12,12 @@ public final class FootballGoalModel {
 
   FootballGoalModel() {}
 
-  FootballGoalModel(FootballLocationModel goalLocation, int width, int height, String direction) {
+  FootballGoalModel(
+    FootballLocationModel goalLocation,
+    int width,
+    int height,
+    String direction
+  ) {
     this.goalLocation = goalLocation;
     this.width = width;
     this.height = height;
@@ -50,19 +57,20 @@ public final class FootballGoalModel {
   }
 
   public DefaultFootballGoal toFootballGoal() {
-    return DefaultFootballGoal.of(
-        goalLocation.toLocation(),
-        width,
-        height,
-        DefaultFootballGoal.FootballGoalDirection.valueOf(direction));
+    return DefaultFootballGoal.of(goalLocation.toLocation(),
+      width,
+      height,
+      DefaultFootballGoal.FootballGoalDirection.valueOf(direction)
+    );
   }
 
   public static FootballGoalModel ofFootballGoal(DefaultFootballGoal footballGoal) {
     Preconditions.checkNotNull(footballGoal);
     return new FootballGoalModel(
-        FootballLocationModel.ofLocation(footballGoal.goalLocation()),
-        footballGoal.width(),
-        footballGoal.height(),
-        footballGoal.direction().toString());
+      FootballLocationModel.ofLocation(footballGoal.goalLocation()),
+      footballGoal.width(),
+      footballGoal.height(),
+      footballGoal.direction().toString()
+    );
   }
 }

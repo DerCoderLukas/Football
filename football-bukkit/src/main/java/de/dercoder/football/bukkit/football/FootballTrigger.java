@@ -1,6 +1,9 @@
-package de.dercoder.football.bukkit;
+package de.dercoder.football.bukkit.football;
 
 import com.google.inject.Inject;
+
+import de.dercoder.football.bukkit.game.FootballGame;
+import de.dercoder.football.bukkit.game.FootballGameRegistry;
 import de.dercoder.football.core.FootballPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -19,21 +22,26 @@ public final class FootballTrigger implements Listener {
   public void onPlayerMove(PlayerMoveEvent playerMove) {
     var player = playerMove.getPlayer();
     var footballPlayer = FootballPlayer.withId(player.getUniqueId());
-    footballGameRegistry
-        .findGameOfPlayer(footballPlayer)
-        .ifPresent(footballGame -> handleFootballKick(footballGame, footballPlayer, player));
+    footballGameRegistry.findGameOfPlayer(footballPlayer)
+      .ifPresent(footballGame -> handleFootballKick(footballGame,
+        footballPlayer,
+        player
+      ));
   }
 
   private void handleFootballKick(
-      FootballGame footballGame, FootballPlayer footballPlayer, Player player) {
+    FootballGame footballGame, FootballPlayer footballPlayer, Player player
+  ) {
     var football = footballGame.football();
     var footballLocation = football.location();
     var playerLocation = player.getLocation();
     if (footballLocation.distance(playerLocation) < 1.0) {
-      footballGame
-          .footballMatch()
-          .findPlayerSession(footballPlayer)
-          .ifPresent(footballPlayerSession -> football.kick(footballPlayerSession, player));
+      footballGame.footballMatch()
+        .findPlayerSession(footballPlayer)
+        .ifPresent(footballPlayerSession -> football.kick(
+          footballPlayerSession,
+          player
+        ));
     }
   }
 }

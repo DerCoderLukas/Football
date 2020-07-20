@@ -1,7 +1,10 @@
-package de.dercoder.football.bukkit;
+package de.dercoder.football.bukkit.game;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Sets;
+
+import de.dercoder.football.bukkit.football.DefaultFootball;
+import de.dercoder.football.bukkit.stadium.FootballStadium;
 import de.dercoder.football.core.FootballPlayer;
 
 import java.util.Collection;
@@ -28,28 +31,31 @@ public final class FootballGameRegistry {
   public boolean isPlayerActive(FootballPlayer footballPlayer) {
     Preconditions.checkNotNull(footballPlayer);
     return footballGames.stream()
-        .anyMatch(footballGame -> footballGame.footballMatch().contains(footballPlayer));
+      .anyMatch(footballGame -> footballGame.footballMatch()
+        .contains(footballPlayer));
   }
 
   public Optional<FootballGame> findGameOfPlayer(FootballPlayer footballPlayer) {
     Preconditions.checkNotNull(footballPlayer);
     return footballGames.stream()
-        .filter(footballGame -> footballGame.footballMatch().contains(footballPlayer))
-        .findFirst();
+      .filter(footballGame -> footballGame.footballMatch()
+        .contains(footballPlayer))
+      .findFirst();
   }
 
   public Optional<FootballGame> findGameByStadium(FootballStadium footballStadium) {
     Preconditions.checkNotNull(footballStadium);
     return footballGames.stream()
-        .filter(footballGame -> footballGame.footballStadium().equals(footballStadium))
-        .findFirst();
+      .filter(footballGame -> footballGame.footballStadium()
+        .equals(footballStadium))
+      .findFirst();
   }
 
   public Optional<FootballGame> findGameByBall(DefaultFootball football) {
     Preconditions.checkNotNull(football);
     return footballGames.stream()
-        .filter(footballGame -> footballGame.football().equals(football))
-        .findFirst();
+      .filter(footballGame -> footballGame.football().equals(football))
+      .findFirst();
   }
 
   public Collection<FootballGame> footballGames() {

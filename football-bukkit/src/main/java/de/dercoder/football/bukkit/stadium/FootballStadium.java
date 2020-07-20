@@ -1,7 +1,9 @@
-package de.dercoder.football.bukkit;
+package de.dercoder.football.bukkit.stadium;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
+
+import de.dercoder.football.bukkit.goal.DefaultFootballGoal;
 import org.bukkit.Location;
 
 public final class FootballStadium {
@@ -10,7 +12,8 @@ public final class FootballStadium {
   private DefaultFootballGoal[] footballGoals;
 
   private FootballStadium(
-      String name, Location stadiumCenter, DefaultFootballGoal[] footballGoals) {
+    String name, Location stadiumCenter, DefaultFootballGoal[] footballGoals
+  ) {
     this.name = name;
     this.stadiumCenter = stadiumCenter;
     this.footballGoals = footballGoals;
@@ -43,7 +46,8 @@ public final class FootballStadium {
   }
 
   public static FootballStadium of(
-      String name, Location stadiumCenter, DefaultFootballGoal[] footballGoals) {
+    String name, Location stadiumCenter, DefaultFootballGoal[] footballGoals
+  ) {
     Preconditions.checkNotNull(name);
     Preconditions.checkNotNull(stadiumCenter);
     Preconditions.checkNotNull(footballGoals);
