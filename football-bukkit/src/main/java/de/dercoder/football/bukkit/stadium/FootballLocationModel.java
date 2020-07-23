@@ -16,12 +16,7 @@ public final class FootballLocationModel {
   FootballLocationModel() {}
 
   FootballLocationModel(
-    String worldName,
-    double x,
-    double y,
-    double z,
-    float yaw,
-    float pitch
+    String worldName, double x, double y, double z, float yaw, float pitch
   ) {
     this.worldName = worldName;
     this.x = x;
@@ -85,7 +80,8 @@ public final class FootballLocationModel {
 
   public static FootballLocationModel ofLocation(Location location) {
     Preconditions.checkNotNull(location);
-    return new FootballLocationModel(location.getWorld().getName(),
+    return new FootballLocationModel(
+      location.getWorld().getName(),
       location.getX(),
       location.getY(),
       location.getZ(),

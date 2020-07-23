@@ -1,5 +1,10 @@
 package de.dercoder.football.bukkit;
 
+import java.util.Optional;
+import java.util.Set;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+
 import com.google.common.collect.Sets;
 
 import com.google.inject.Inject;
@@ -20,11 +25,6 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-
-import java.util.Optional;
-import java.util.Set;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 public final class FootballCommand implements CommandExecutor {
   private final String prefix;
@@ -76,8 +76,7 @@ public final class FootballCommand implements CommandExecutor {
   }
 
   private boolean onFootballOverview(
-    CommandSender commandSender,
-    Command command
+    CommandSender commandSender, Command command
   ) {
     sendPrefixMessage(commandSender, "Football:");
     sendPrefixMessage(commandSender, "  - /football stadium");
@@ -109,12 +108,10 @@ public final class FootballCommand implements CommandExecutor {
   }
 
   private boolean onFootballStadiumList(
-    CommandSender commandSender,
-    Command command
+    CommandSender commandSender, Command command
   ) {
     var footballStadiums = footballStadiumRepository.findAll();
-    sendPrefixMessage(
-      commandSender,
+    sendPrefixMessage(commandSender,
       "Football-Stadiums: §e" + footballStadiums.size()
     );
     sendPrefixMessage(commandSender, "Football-Stadium-List:");
@@ -135,22 +132,19 @@ public final class FootballCommand implements CommandExecutor {
       var footballStadiumName = arguments[2];
       footballStadiumRepository.find(footballStadiumName)
         .ifPresentOrElse(footballStadium -> {
-          sendPrefixMessage(
-            commandSender,
+          sendPrefixMessage(commandSender,
             "There is already a stadium with that name."
           );
         }, () -> {
           var player = (Player) commandSender;
           var playerLocation = player.getLocation();
           var footballGoals = new DefaultFootballGoal[0];
-          var footballStadium = FootballStadium.of(
-            footballStadiumName,
+          var footballStadium = FootballStadium.of(footballStadiumName,
             playerLocation,
             footballGoals
           );
           footballStadiumRepository.register(footballStadium);
-          sendPrefixMessage(
-            commandSender,
+          sendPrefixMessage(commandSender,
             "You successfully added a new stadium."
           );
         });
@@ -185,8 +179,7 @@ public final class FootballCommand implements CommandExecutor {
                 directionString.toUpperCase());
               var player = (Player) commandSender;
               var playerLocation = player.getLocation();
-              var footballGoal = DefaultFootballGoal.of(
-                playerLocation,
+              var footballGoal = DefaultFootballGoal.of(playerLocation,
                 width,
                 height,
                 direction
@@ -197,14 +190,12 @@ public final class FootballCommand implements CommandExecutor {
                 "You successfully added a new goal to the stadium."
               );
             } catch (Exception exception) {
-              sendPrefixMessage(
-                commandSender,
+              sendPrefixMessage(commandSender,
                 "Can't find the direction " + directionString + "."
               );
             }
           }, () -> {
-            sendPrefixMessage(
-              commandSender,
+            sendPrefixMessage(commandSender,
               "Can't find any stadium with that name."
             );
           });
@@ -229,32 +220,26 @@ public final class FootballCommand implements CommandExecutor {
       var footballStadiumName = arguments[2];
       footballStadiumRepository.find(footballStadiumName)
         .ifPresentOrElse(footballStadium -> {
-          sendPrefixMessage(
-            commandSender,
+          sendPrefixMessage(commandSender,
             "Football-Stadium-" + footballStadiumName + ":"
           );
           sendPrefixMessage(commandSender, "  - Name: " + footballStadiumName);
           var footballStadiumCenterLocation = footballStadium.stadiumCenter();
           sendPrefixMessage(commandSender, "  - Center:");
-          sendPrefixMessage(
-            commandSender,
+          sendPrefixMessage(commandSender,
             "      - X: " + footballStadiumCenterLocation.getX()
           );
-          sendPrefixMessage(
-            commandSender,
+          sendPrefixMessage(commandSender,
             "      - Y: " + footballStadiumCenterLocation.getY()
           );
-          sendPrefixMessage(
-            commandSender,
+          sendPrefixMessage(commandSender,
             "      - Z: " + footballStadiumCenterLocation.getZ()
           );
-          sendPrefixMessage(
-            commandSender,
+          sendPrefixMessage(commandSender,
             "  - Goals: " + footballStadium.footballGoals().length
           );
         }, () -> {
-          sendPrefixMessage(
-            commandSender,
+          sendPrefixMessage(commandSender,
             "Can't find any stadium with that name."
           );
         });
@@ -273,13 +258,11 @@ public final class FootballCommand implements CommandExecutor {
       footballStadiumRepository.find(footballStadiumName)
         .ifPresentOrElse(footballStadium -> {
           footballStadiumRepository.unregister(footballStadium);
-          sendPrefixMessage(
-            commandSender,
+          sendPrefixMessage(commandSender,
             "You successfully removed the stadium."
           );
         }, () -> {
-          sendPrefixMessage(
-            commandSender,
+          sendPrefixMessage(commandSender,
             "Can't find any stadium with that name."
           );
         });
@@ -291,8 +274,7 @@ public final class FootballCommand implements CommandExecutor {
   }
 
   private boolean onFootballStadiumOverview(
-    CommandSender commandSender,
-    Command command
+    CommandSender commandSender, Command command
   ) {
     sendPrefixMessage(commandSender, "Football-Stadium:");
     sendPrefixMessage(commandSender, "  - /football stadium list");
@@ -307,9 +289,7 @@ public final class FootballCommand implements CommandExecutor {
   }
 
   private boolean onFootballGame(
-    CommandSender commandSender,
-    Command command,
-    String[] arguments
+    CommandSender commandSender, Command command, String[] arguments
   ) {
     if (arguments.length > 1) {
       var keyword = arguments[1];
@@ -330,18 +310,15 @@ public final class FootballCommand implements CommandExecutor {
   }
 
   private boolean onFootballGameList(
-    CommandSender commandSender,
-    Command command
+    CommandSender commandSender, Command command
   ) {
     var footballGames = footballGameRegistry.footballGames();
-    sendPrefixMessage(
-      commandSender,
+    sendPrefixMessage(commandSender,
       "Football-Games: §e" + footballGames.size()
     );
     sendPrefixMessage(commandSender, "Football-Game-List:");
     for ( var footballGame : footballGames ) {
-      sendPrefixMessage(
-        commandSender,
+      sendPrefixMessage(commandSender,
         "  - " + footballGame.footballStadium().name()
       );
     }
@@ -360,17 +337,14 @@ public final class FootballCommand implements CommandExecutor {
           if (footballGameRegistry.findGameByStadium(footballStadium)
             .isEmpty()) {
             var footballGoals = footballStadium.footballGoals();
-            var firstTeamOptional = parseFootballTeam(
-              firstTeamPlayers,
+            var firstTeamOptional = parseFootballTeam(firstTeamPlayers,
               footballGoals[0]
             );
-            var secondTeamOptional = parseFootballTeam(
-              secondTeamPlayers,
+            var secondTeamOptional = parseFootballTeam(secondTeamPlayers,
               footballGoals[1]
             );
             if (firstTeamOptional.isEmpty() || secondTeamOptional.isEmpty()) {
-              sendPrefixMessage(
-                commandSender,
+              sendPrefixMessage(commandSender,
                 "One of the provided players is not online."
               );
             }
@@ -381,8 +355,7 @@ public final class FootballCommand implements CommandExecutor {
             var footballMatch = FootballMatch.empty(football, footballGoals);
             var footballTeams = new FootballTeam[]{firstTeam, secondTeam};
             footballMatch.fillMatch(footballTeams);
-            footballGameFactory.createFootballGame(
-              footballMatch,
+            footballGameFactory.createFootballGame(footballMatch,
               footballStadium
             );
             sendPrefixMessage(commandSender,
@@ -395,8 +368,7 @@ public final class FootballCommand implements CommandExecutor {
             );
           }
         }, () -> {
-          sendPrefixMessage(
-            commandSender,
+          sendPrefixMessage(commandSender,
             "Can't find any stadium with that name."
           );
         });
@@ -436,37 +408,31 @@ public final class FootballCommand implements CommandExecutor {
         .ifPresentOrElse(footballStadium -> {
           footballGameRegistry.findGameByStadium(footballStadium)
             .ifPresentOrElse(footballGame -> {
-              sendPrefixMessage(
-                commandSender,
+              sendPrefixMessage(commandSender,
                 "Football-Game-" + footballStadiumName + ":"
               );
-              sendPrefixMessage(
-                commandSender,
+              sendPrefixMessage(commandSender,
                 "  - Stadium: " + footballStadiumName
               );
               sendPrefixMessage(commandSender, "  - Teams: ");
               var footballTeams = footballGame.footballTeams();
-              displayFootballTeam(
-                commandSender,
+              displayFootballTeam(commandSender,
                 footballGame,
                 footballTeams[0],
                 "First"
               );
-              displayFootballTeam(
-                commandSender,
+              displayFootballTeam(commandSender,
                 footballGame,
                 footballTeams[1],
                 "Second"
               );
             }, () -> {
-              sendPrefixMessage(
-                commandSender,
+              sendPrefixMessage(commandSender,
                 "Can't find any football game at that stadium."
               );
             });
         }, () -> {
-          sendPrefixMessage(
-            commandSender,
+          sendPrefixMessage(commandSender,
             "Can't find any stadium with that name."
           );
         });
@@ -501,19 +467,16 @@ public final class FootballCommand implements CommandExecutor {
           footballGameRegistry.findGameByStadium(footballStadium)
             .ifPresentOrElse(footballGame -> {
               footballGame.close();
-              sendPrefixMessage(
-                commandSender,
+              sendPrefixMessage(commandSender,
                 "You successful stopped the football game."
               );
             }, () -> {
-              sendPrefixMessage(
-                commandSender,
+              sendPrefixMessage(commandSender,
                 "Can't find any football game at that stadium."
               );
             });
         }, () -> {
-          sendPrefixMessage(
-            commandSender,
+          sendPrefixMessage(commandSender,
             "Can't find any stadium with that name."
           );
         });
@@ -525,8 +488,7 @@ public final class FootballCommand implements CommandExecutor {
   }
 
   private boolean onFootballGameOverview(
-    CommandSender commandSender,
-    Command command
+    CommandSender commandSender, Command command
   ) {
     sendPrefixMessage(commandSender, "Football-Game:");
     sendPrefixMessage(commandSender, "  - /football game list");
@@ -544,8 +506,7 @@ public final class FootballCommand implements CommandExecutor {
   }
 
   private void sendSyntaxCorrection(
-    CommandSender commandSender,
-    String correction
+    CommandSender commandSender, String correction
   ) {
     commandSender.sendMessage(prefix + "Syntax: " + correction);
   }

@@ -1,15 +1,15 @@
 package de.dercoder.football.bukkit.game;
 
+import java.util.Collection;
+import java.util.Optional;
+import java.util.Set;
+
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Sets;
 
 import de.dercoder.football.bukkit.football.DefaultFootball;
 import de.dercoder.football.bukkit.stadium.FootballStadium;
 import de.dercoder.football.core.FootballPlayer;
-
-import java.util.Collection;
-import java.util.Optional;
-import java.util.Set;
 
 public final class FootballGameRegistry {
   private Collection<FootballGame> footballGames;

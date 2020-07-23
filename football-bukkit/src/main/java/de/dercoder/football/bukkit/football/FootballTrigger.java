@@ -38,8 +38,7 @@ public final class FootballTrigger implements Listener {
     if (footballLocation.distance(playerLocation) < 1.0) {
       footballGame.footballMatch()
         .findPlayerSession(footballPlayer)
-        .ifPresent(footballPlayerSession -> football.kick(
-          footballPlayerSession,
+        .ifPresent(footballPlayerSession -> football.kick(footballPlayerSession,
           player
         ));
     }

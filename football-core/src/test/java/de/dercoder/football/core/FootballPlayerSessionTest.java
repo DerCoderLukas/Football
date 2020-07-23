@@ -1,11 +1,11 @@
 package de.dercoder.football.core;
 
+import java.util.UUID;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.UUID;
-
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 final class FootballPlayerSessionTest {
   private FootballPlayerSession playerSession;
@@ -13,7 +13,10 @@ final class FootballPlayerSessionTest {
   @BeforeEach
   void initialize() {
     var player = FootballPlayer.withId(UUID.randomUUID());
-    playerSession = FootballPlayerSession.of(player, 0, FootballPunishment.UNPUNISHED);
+    playerSession = FootballPlayerSession.of(player,
+      0,
+      FootballPunishment.UNPUNISHED
+    );
   }
 
   @Test

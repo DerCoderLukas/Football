@@ -1,8 +1,8 @@
 package de.dercoder.football.core;
 
-import com.google.common.base.Preconditions;
-
 import java.util.UUID;
+
+import com.google.common.base.Preconditions;
 
 public final class FootballPlayerSession {
   private final FootballPlayer footballPlayer;
@@ -10,7 +10,10 @@ public final class FootballPlayerSession {
   private FootballPunishment footballPunishment;
 
   private FootballPlayerSession(
-      FootballPlayer footballPlayer, int goals, FootballPunishment footballPunishment) {
+    FootballPlayer footballPlayer,
+    int goals,
+    FootballPunishment footballPunishment
+  ) {
     this.footballPlayer = footballPlayer;
     this.goals = goals;
     this.footballPunishment = footballPunishment;
@@ -42,7 +45,10 @@ public final class FootballPlayerSession {
   }
 
   public static FootballPlayerSession of(
-      FootballPlayer footballPlayer, int goals, FootballPunishment footballPunishment) {
+    FootballPlayer footballPlayer,
+    int goals,
+    FootballPunishment footballPunishment
+  ) {
     Preconditions.checkNotNull(footballPlayer);
     Preconditions.checkNotNull(footballPunishment);
     return new FootballPlayerSession(footballPlayer, goals, footballPunishment);

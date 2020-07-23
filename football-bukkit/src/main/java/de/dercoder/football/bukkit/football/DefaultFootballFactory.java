@@ -5,9 +5,8 @@ import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 
 import de.dercoder.football.bukkit.configuration.FootballConfigurationRepository;
-import org.bukkit.Location;
-
 import javax.inject.Singleton;
+import org.bukkit.Location;
 
 @Singleton
 public final class DefaultFootballFactory {
@@ -23,8 +22,7 @@ public final class DefaultFootballFactory {
     var configuration = footballConfigurationRepository.footballConfiguration();
     var footballTextureValue = configuration.getFootballTextureValue();
     var footballTextureSignature = configuration.getFootballTextureSignature();
-    return DefaultFootball.of(
-      spawnLocation,
+    return DefaultFootball.of(spawnLocation,
       footballTextureValue,
       footballTextureSignature
     );

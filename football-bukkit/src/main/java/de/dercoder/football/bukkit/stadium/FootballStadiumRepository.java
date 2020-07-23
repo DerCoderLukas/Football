@@ -1,20 +1,19 @@
 package de.dercoder.football.bukkit.stadium;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import com.google.common.base.Preconditions;
-import com.google.common.collect.Sets;
-
-import de.dercoder.football.bukkit.configuration.FootballConfigurationException;
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.inject.Singleton;
-
 import java.nio.file.Path;
 import java.util.Collection;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import com.google.common.base.Preconditions;
+import com.google.common.collect.Sets;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import de.dercoder.football.bukkit.configuration.FootballConfigurationException;
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.inject.Singleton;
 
 @Singleton
 public final class FootballStadiumRepository {
@@ -42,8 +41,7 @@ public final class FootballStadiumRepository {
 
   private FootballStadiumConfiguration readConfiguration() throws FootballConfigurationException {
     try {
-      return objectMapper.readValue(
-        repositoryPath.toFile(),
+      return objectMapper.readValue(repositoryPath.toFile(),
         FootballStadiumConfiguration.class
       );
     } catch (Exception exception) {

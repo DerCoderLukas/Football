@@ -11,12 +11,18 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class FootballPlugin extends JavaPlugin {
-  @Inject private FootballConfigurationRepository footballConfigurationRepository;
-  @Inject private FootballStadiumRepository footballStadiumRepository;
-  @Inject private PluginManager pluginManager;
-  @Inject private FootballCommand footballCommand;
-  @Inject private FootballTrigger footballTrigger;
-  @Inject private FootballGoalTrigger footballGoalTrigger;
+  @Inject
+  private FootballConfigurationRepository footballConfigurationRepository;
+  @Inject
+  private FootballStadiumRepository footballStadiumRepository;
+  @Inject
+  private PluginManager pluginManager;
+  @Inject
+  private FootballCommand footballCommand;
+  @Inject
+  private FootballTrigger footballTrigger;
+  @Inject
+  private FootballGoalTrigger footballGoalTrigger;
 
   @Override
   public void onEnable() {

@@ -6,8 +6,7 @@ public enum FootballPunishment {
     FootballPunishment punish(FootballPunishment footballPunishment) {
       return FootballPunishment.UNPUNISHED;
     }
-  },
-  YELLOW_CARD {
+  }, YELLOW_CARD {
     @Override
     FootballPunishment punish(FootballPunishment footballPunishment) {
       if (footballPunishment == FootballPunishment.UNPUNISHED) {
@@ -15,8 +14,7 @@ public enum FootballPunishment {
       }
       return FootballPunishment.RED_CARD;
     }
-  },
-  RED_CARD {
+  }, RED_CARD {
     @Override
     FootballPunishment punish(FootballPunishment footballPunishment) {
       return FootballPunishment.RED_CARD;

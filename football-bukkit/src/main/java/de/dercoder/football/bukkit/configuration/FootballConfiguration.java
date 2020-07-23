@@ -44,8 +44,7 @@ public final class FootballConfiguration {
   }
 
   public String parseIntermediateScoreMessage(int firstScore, int secondScore) {
-    return parseScoreMessage(
-      intermediateScoreMessage,
+    return parseScoreMessage(intermediateScoreMessage,
       "",
       firstScore,
       secondScore
@@ -61,9 +60,7 @@ public final class FootballConfiguration {
   }
 
   public String parseScoreMainMessage(
-    String scorer,
-    int firstScore,
-    int secondScore
+    String scorer, int firstScore, int secondScore
   ) {
     return parseScoreMessage(scoreMainMessage, scorer, firstScore, secondScore);
   }
@@ -77,12 +74,9 @@ public final class FootballConfiguration {
   }
 
   public String parseScoreSecondaryMessage(
-    String scorer,
-    int firstScore,
-    int secondScore
+    String scorer, int firstScore, int secondScore
   ) {
-    return parseScoreMessage(
-      scoreSecondaryMessage,
+    return parseScoreMessage(scoreSecondaryMessage,
       scorer,
       firstScore,
       secondScore
@@ -94,10 +88,7 @@ public final class FootballConfiguration {
   }
 
   private String parseScoreMessage(
-    String message,
-    String scorer,
-    int firstScore,
-    int secondScore
+    String message, String scorer, int firstScore, int secondScore
   ) {
     return message.replace("&", "§")
       .replace("%scorer%", scorer)

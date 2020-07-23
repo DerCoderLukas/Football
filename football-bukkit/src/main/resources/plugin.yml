@@ -1,8 +1,8 @@
 name: Football
-version: 1.0
+version: 1.0.0
 main: de.dercoder.football.bukkit.FootballPlugin
 author: DerCoder
-api-version: 1.15
+api-version: 1.16.1
 
 commands:
   football:

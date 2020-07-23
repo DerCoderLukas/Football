@@ -13,10 +13,7 @@ public final class FootballGoalModel {
   FootballGoalModel() {}
 
   FootballGoalModel(
-    FootballLocationModel goalLocation,
-    int width,
-    int height,
-    String direction
+    FootballLocationModel goalLocation, int width, int height, String direction
   ) {
     this.goalLocation = goalLocation;
     this.width = width;
@@ -57,7 +54,8 @@ public final class FootballGoalModel {
   }
 
   public DefaultFootballGoal toFootballGoal() {
-    return DefaultFootballGoal.of(goalLocation.toLocation(),
+    return DefaultFootballGoal.of(
+      goalLocation.toLocation(),
       width,
       height,
       DefaultFootballGoal.FootballGoalDirection.valueOf(direction)

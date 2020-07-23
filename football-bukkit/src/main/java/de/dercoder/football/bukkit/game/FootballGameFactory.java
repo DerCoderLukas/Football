@@ -4,11 +4,10 @@ import com.google.common.base.Preconditions;
 
 import com.google.inject.Inject;
 
-import de.dercoder.football.bukkit.stadium.FootballStadium;
 import de.dercoder.football.bukkit.configuration.FootballConfiguration;
 import de.dercoder.football.bukkit.configuration.FootballConfigurationRepository;
+import de.dercoder.football.bukkit.stadium.FootballStadium;
 import de.dercoder.football.core.FootballMatch;
-
 import javax.inject.Singleton;
 
 @Singleton

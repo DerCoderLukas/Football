@@ -1,23 +1,23 @@
 package de.dercoder.football.bukkit.game;
 
+import java.util.Arrays;
+import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import com.google.common.base.Preconditions;
 
+import de.dercoder.football.bukkit.FootballPlugin;
+import de.dercoder.football.bukkit.configuration.FootballConfiguration;
 import de.dercoder.football.bukkit.football.DefaultFootball;
 import de.dercoder.football.bukkit.goal.DefaultFootballGoal;
-import de.dercoder.football.bukkit.FootballPlugin;
 import de.dercoder.football.bukkit.stadium.FootballStadium;
-import de.dercoder.football.bukkit.configuration.FootballConfiguration;
 import de.dercoder.football.core.FootballMatch;
 import de.dercoder.football.core.FootballTeam;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-
-import java.util.Arrays;
-import java.util.Objects;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public final class FootballGame {
   private final FootballMatch footballMatch;
@@ -87,8 +87,7 @@ public final class FootballGame {
 
   private void sendIntermediateTitles() {
     var teams = footballMatch.teams().get();
-    var intermediateScoreMessage = new TextComponent(footballConfiguration.parseIntermediateScoreMessage(
-      teams[0].goals(),
+    var intermediateScoreMessage = new TextComponent(footballConfiguration.parseIntermediateScoreMessage(teams[0].goals(),
       teams[1].goals()
     ));
     var players = findAllPlayers().collect(Collectors.toUnmodifiableList());
@@ -101,13 +100,11 @@ public final class FootballGame {
   private void sendGoalTitles() {
     var teams = footballMatch.teams().get();
     var scorerName = Bukkit.getPlayer(football().shooter().id()).getName();
-    var scoreMainMessage = footballConfiguration.parseScoreMainMessage(
-      scorerName,
+    var scoreMainMessage = footballConfiguration.parseScoreMainMessage(scorerName,
       teams[0].goals(),
       teams[1].goals()
     );
-    var scoreSecondaryMessage = footballConfiguration.parseScoreSecondaryMessage(
-      scorerName,
+    var scoreSecondaryMessage = footballConfiguration.parseScoreSecondaryMessage(scorerName,
       teams[0].goals(),
       teams[1].goals()
     );
@@ -166,8 +163,7 @@ public final class FootballGame {
     Preconditions.checkNotNull(footballStadium);
     Preconditions.checkNotNull(footballGameRegistry);
     Preconditions.checkNotNull(footballConfiguration);
-    var footballGame = new FootballGame(
-      footballMatch,
+    var footballGame = new FootballGame(footballMatch,
       footballStadium,
       footballGameRegistry,
       footballConfiguration

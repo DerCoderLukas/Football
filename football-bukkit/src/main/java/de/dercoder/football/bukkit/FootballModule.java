@@ -1,8 +1,6 @@
 package de.dercoder.football.bukkit;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
-import com.fasterxml.jackson.dataformat.yaml.YAMLGenerator;
+import java.nio.file.Path;
 
 import com.google.common.base.Preconditions;
 
@@ -10,13 +8,13 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.name.Named;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+import com.fasterxml.jackson.dataformat.yaml.YAMLGenerator;
 import de.dercoder.football.bukkit.game.FootballGameRegistry;
+import javax.inject.Singleton;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import javax.inject.Singleton;
-
-import java.nio.file.Path;
 
 public final class FootballModule extends AbstractModule {
   private final JavaPlugin plugin;
@@ -60,8 +58,7 @@ public final class FootballModule extends AbstractModule {
   @Singleton
   @Named("stadiumsPath")
   Path provideStadiumsPath() {
-    return Path.of(
-      plugin.getDataFolder().getAbsolutePath(),
+    return Path.of(plugin.getDataFolder().getAbsolutePath(),
       STADIUMS_REPOSITORY_PATH
     );
   }
@@ -72,8 +69,7 @@ public final class FootballModule extends AbstractModule {
   @Singleton
   @Named("configurationPath")
   Path provideConfigurationPath() {
-    return Path.of(
-      plugin.getDataFolder().getAbsolutePath(),
+    return Path.of(plugin.getDataFolder().getAbsolutePath(),
       FOOTBALL_CONFIGURATION_PATH
     );
   }

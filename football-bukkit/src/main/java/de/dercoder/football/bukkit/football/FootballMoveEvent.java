@@ -12,9 +12,7 @@ public final class FootballMoveEvent extends Event {
   private final Location locationFrom;
 
   private FootballMoveEvent(
-    DefaultFootball football,
-    Location locationTo,
-    Location locationFrom
+    DefaultFootball football, Location locationTo, Location locationFrom
   ) {
     this.football = football;
     this.locationTo = locationTo;

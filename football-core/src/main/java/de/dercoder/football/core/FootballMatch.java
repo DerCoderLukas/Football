@@ -1,10 +1,13 @@
 package de.dercoder.football.core;
 
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Optional;
+import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
+
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Sets;
-
-import java.util.*;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 public final class FootballMatch {
   private final Football football;
@@ -13,10 +16,11 @@ public final class FootballMatch {
   private FootballTeam[] teams;
 
   private FootballMatch(
-      Football football,
-      FootballGoal[] goals,
-      FootballTeam[] teams,
-      Collection<FootballPlayerSession> players) {
+    Football football,
+    FootballGoal[] goals,
+    FootballTeam[] teams,
+    Collection<FootballPlayerSession> players
+  ) {
     this.football = football;
     this.goals = goals;
     this.teams = teams;
@@ -30,13 +34,16 @@ public final class FootballMatch {
 
   public void addPlayer(FootballPlayer footballPlayer) {
     Preconditions.checkNotNull(footballPlayer);
-    findPlayerSession(footballPlayer)
-        .ifPresentOrElse(this::addPlayer, () -> createAndAddPlayer(footballPlayer));
+    findPlayerSession(footballPlayer).ifPresentOrElse(this::addPlayer,
+      () -> createAndAddPlayer(footballPlayer)
+    );
   }
 
   private void createAndAddPlayer(FootballPlayer footballPlayer) {
-    var footballPlayerSession =
-        FootballPlayerSession.of(footballPlayer, 0, FootballPunishment.UNPUNISHED);
+    var footballPlayerSession = FootballPlayerSession.of(footballPlayer,
+      0,
+      FootballPunishment.UNPUNISHED
+    );
     addPlayer(footballPlayerSession);
   }
 
@@ -51,61 +58,61 @@ public final class FootballMatch {
   }
 
   public boolean exchangePlayers(
-      FootballPlayer playingPlayer, FootballPlayer playerToExchangeWith) {
+    FootballPlayer playingPlayer, FootballPlayer playerToExchangeWith
+  ) {
     Preconditions.checkNotNull(playingPlayer);
     Preconditions.checkNotNull(playerToExchangeWith);
     var exchanged = new AtomicBoolean(false);
-    findTeamOfPlayer(playingPlayer)
-        .ifPresent(
-            playingPlayerTeam -> {
-              findTeamOfPlayer(playerToExchangeWith)
-                  .ifPresent(
-                      playerToExchangeWithTeam -> {
-                        if (!playingPlayerTeam.equals(playerToExchangeWithTeam)) {
-                          return;
-                        }
-                        exchanged.set(true);
-                        exchangePlayersDirectly(playingPlayer, playerToExchangeWith);
-                      });
-            });
+    findTeamOfPlayer(playingPlayer).ifPresent(playingPlayerTeam -> {
+      findTeamOfPlayer(playerToExchangeWith).ifPresent(playerToExchangeWithTeam -> {
+        if (!playingPlayerTeam.equals(playerToExchangeWithTeam)) {
+          return;
+        }
+        exchanged.set(true);
+        exchangePlayersDirectly(playingPlayer, playerToExchangeWith);
+      });
+    });
     return exchanged.get();
   }
 
   private void exchangePlayersDirectly(
-      FootballPlayer playingPlayer, FootballPlayer playerToExchangeWith) {
+    FootballPlayer playingPlayer, FootballPlayer playerToExchangeWith
+  ) {
     addPlayer(playerToExchangeWith);
     removePlayer(playingPlayer);
   }
 
   public boolean contains(FootballPlayer footballPlayer) {
     Preconditions.checkNotNull(footballPlayer);
-    return (findPlayerSession(footballPlayer).isPresent()
-        || (findTeamOfPlayer(footballPlayer).isPresent()));
+    return (findPlayerSession(footballPlayer).isPresent() || (findTeamOfPlayer(
+      footballPlayer).isPresent()));
   }
 
   public Optional<FootballPlayerSession> findPlayerSession(FootballPlayer footballPlayer) {
     Preconditions.checkNotNull(footballPlayer);
-    return players.stream().filter(player -> player.id().equals(footballPlayer.id())).findFirst();
+    return players.stream()
+      .filter(player -> player.id().equals(footballPlayer.id()))
+      .findFirst();
   }
 
   public Optional<FootballTeam> findTeamOfPlayer(FootballPlayer footballPlayer) {
     Preconditions.checkNotNull(footballPlayer);
     return Arrays.stream(teams)
-        .filter(footballTeam -> footballTeam.contains(footballPlayer))
-        .findFirst();
+      .filter(footballTeam -> footballTeam.contains(footballPlayer))
+      .findFirst();
   }
 
   public Optional<FootballTeam> findTeamOfGoal(FootballGoal footballGoal) {
     Preconditions.checkNotNull(footballGoal);
     return Arrays.stream(teams)
-        .filter(footballTeam -> footballTeam.footballGoal().equals(footballGoal))
-        .findFirst();
+      .filter(footballTeam -> footballTeam.footballGoal().equals(footballGoal))
+      .findFirst();
   }
 
   public void fillMatch(FootballTeam[] teams) {
     Preconditions.checkNotNull(teams);
     this.teams = teams;
-    for (var footballTeam : teams) {
+    for ( var footballTeam : teams ) {
       footballTeam.players().forEach(this::addPlayer);
     }
   }
@@ -127,10 +134,11 @@ public final class FootballMatch {
   }
 
   public static FootballMatch of(
-      Football football,
-      FootballGoal[] goals,
-      FootballTeam[] teams,
-      Set<FootballPlayerSession> players) {
+    Football football,
+    FootballGoal[] goals,
+    FootballTeam[] teams,
+    Set<FootballPlayerSession> players
+  ) {
     Preconditions.checkNotNull(football);
     Preconditions.checkNotNull(goals);
     Preconditions.checkNotNull(teams);

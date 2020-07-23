@@ -1,17 +1,19 @@
 package de.dercoder.football.core;
 
-import com.google.common.base.Preconditions;
-import com.google.common.collect.Sets;
-
 import java.util.Collection;
 import java.util.Set;
+
+import com.google.common.base.Preconditions;
+import com.google.common.collect.Sets;
 
 public final class FootballTeam {
   private final Collection<FootballPlayer> players;
   private final FootballGoal footballGoal;
   private int goals;
 
-  private FootballTeam(Collection<FootballPlayer> players, FootballGoal footballGoal, int goals) {
+  private FootballTeam(
+    Collection<FootballPlayer> players, FootballGoal footballGoal, int goals
+  ) {
     this.players = players;
     this.footballGoal = footballGoal;
     this.goals = goals;
@@ -32,7 +34,8 @@ public final class FootballTeam {
     if (players.contains(footballPlayer)) {
       return true;
     }
-    return this.players.stream().anyMatch(player -> player.id().equals(footballPlayer.id()));
+    return this.players.stream()
+      .anyMatch(player -> player.id().equals(footballPlayer.id()));
   }
 
   public void shootAGoal() {
@@ -51,7 +54,9 @@ public final class FootballTeam {
     return goals;
   }
 
-  public static FootballTeam of(Set<FootballPlayer> players, FootballGoal footballGoal, int goals) {
+  public static FootballTeam of(
+    Set<FootballPlayer> players, FootballGoal footballGoal, int goals
+  ) {
     Preconditions.checkNotNull(players);
     Preconditions.checkNotNull(footballGoal);
     return new FootballTeam(Sets.newHashSet(players), footballGoal, goals);

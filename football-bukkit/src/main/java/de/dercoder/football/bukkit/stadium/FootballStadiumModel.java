@@ -1,8 +1,8 @@
 package de.dercoder.football.bukkit.stadium;
 
-import com.google.common.base.Preconditions;
-
 import java.util.Arrays;
+
+import com.google.common.base.Preconditions;
 
 import de.dercoder.football.bukkit.goal.DefaultFootballGoal;
 import de.dercoder.football.bukkit.goal.FootballGoalModel;
@@ -66,8 +66,7 @@ public final class FootballStadiumModel {
     Preconditions.checkNotNull(footballStadium);
     var stadiumCenterModel = FootballLocationModel.ofLocation(footballStadium.stadiumCenter());
     var stadiumGoals = modelsFromGoals(footballStadium.footballGoals());
-    return new FootballStadiumModel(
-      footballStadium.name(),
+    return new FootballStadiumModel(footballStadium.name(),
       stadiumCenterModel,
       stadiumGoals
     );

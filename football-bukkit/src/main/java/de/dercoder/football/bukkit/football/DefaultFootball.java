@@ -1,5 +1,7 @@
 package de.dercoder.football.bukkit.football;
 
+import java.util.UUID;
+
 import com.google.common.base.Preconditions;
 
 import com.mojang.authlib.GameProfile;
@@ -16,8 +18,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.Vector;
-
-import java.util.UUID;
 
 public final class DefaultFootball implements Football {
   private final Location spawnLocation;
@@ -54,8 +54,7 @@ public final class DefaultFootball implements Football {
   private ItemStack createFootballItemStack() {
     var itemStack = new ItemStack(Material.PLAYER_HEAD);
     var itemMeta = itemStack.getItemMeta();
-    var gameProfile = profileFromTextures(
-      footballTextureValue,
+    var gameProfile = profileFromTextures(footballTextureValue,
       footballTextureSignature
     );
     profileToMeta(itemMeta, gameProfile);
@@ -64,13 +63,11 @@ public final class DefaultFootball implements Football {
   }
 
   private GameProfile profileFromTextures(
-    String textureValue,
-    String textureSignature
+    String textureValue, String textureSignature
   ) {
     var gameProfile = new GameProfile(UUID.randomUUID(), "");
     gameProfile.getProperties()
-      .put(
-        "textures",
+      .put("textures",
         new Property("textures", textureValue, textureSignature)
       );
     return gameProfile;
@@ -118,8 +115,7 @@ public final class DefaultFootball implements Football {
           if (isLocationEquals(location, lastLocation)) {
             return;
           }
-          var footballMoveEvent = FootballMoveEvent.of(
-            this,
+          var footballMoveEvent = FootballMoveEvent.of(this,
             location.clone(),
             lastLocation.clone()
           );
@@ -135,8 +131,7 @@ public final class DefaultFootball implements Football {
   }
 
   private boolean isLocationEquals(
-    Location fistLocation,
-    Location secondLocation
+    Location fistLocation, Location secondLocation
   ) {
     if (fistLocation.getX() == secondLocation.getX() && fistLocation.getY() == secondLocation
       .getY() && fistLocation.getZ() == secondLocation.getZ() && fistLocation.getYaw() == secondLocation
@@ -166,8 +161,7 @@ public final class DefaultFootball implements Football {
     Preconditions.checkNotNull(spawnLocation);
     Preconditions.checkNotNull(footballTextureValue);
     Preconditions.checkNotNull(footballTextureSignature);
-    var football = new DefaultFootball(
-      spawnLocation,
+    var football = new DefaultFootball(spawnLocation,
       footballTextureValue,
       footballTextureSignature
     );
