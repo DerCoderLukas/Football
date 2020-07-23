@@ -4,9 +4,9 @@ Simple football system with simple administrative control and setup as well as s
 
 # Requirements
 
-• Java 11
+• Java 14
 
-• Spigot 1.15.2
+• Spigot 1.16.1
 
 # Installation
 
